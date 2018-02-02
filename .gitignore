@@ -1,0 +1,6 @@
+*~
+.DS_Store
+*.png
+*.out
+mnist
+compile.sh
