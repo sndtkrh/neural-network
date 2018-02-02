@@ -28,7 +28,8 @@ int main(){
   InputLayer input( IMAGE_H * IMAGE_W );
   FullyConnectedLayer full1( 100, &input, rel, "1" );
   FullyConnectedLayer full2( 50, &full1, rel, "2" );
-  SoftmaxLayer softmax( 10, &full2 );
+  FullyConnectedLayer full3( 30, &full2, rel, "3" );
+  SoftmaxLayer softmax( 10, &full3 );
 
   vec image;
   vec target(10,0);
@@ -40,12 +41,11 @@ int main(){
       image = mnist_dataset[0][j][ rand(mt) ];
       target[j] = 1.0;
       one_step( input, softmax, image, target );
-
-      if( i % 1000 == 0 && j == 9 ){
-	std::cout << "i=" << i << std::endl;
-	test( input, softmax );
-      }
       target[j] = 0;
+    }
+    if( i % 1000 == 0 ){
+      std::cout << "i=" << i << std::endl;
+      test( input, softmax );
     }
   }
   std::cout << "[[[[ learned ]]]]" << std::endl;
