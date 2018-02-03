@@ -3,7 +3,7 @@
 #include <random>
 #include "matrix.hpp"
 #include "io.hpp"
-#include "layers.hpp"
+#include "layer/layer.hpp"
 
 const std::string TRAINING_DATASET_DIR = "../MNIST_dataset/mnist_png/training";
 const std::string TESTING_DATASET_DIR = "../MNIST_dataset/mnist_png/testing";
