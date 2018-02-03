@@ -126,15 +126,12 @@ public:
       previous_layer->back_propagate();
   }
   void gradient_descent(F learning_rate, F momentum){
-    // std::cout << layer_name + " : gradient_descent" << std::endl;
-    // std::cout << layer_name + " : gradient_descent filter" << std::endl;
     // update filter weight
     for(int ch = 0; ch < channel; ch++){
       for(int pch = 0; pch < prev_channel; pch++){
 	for(int p = 0; p < filter_size; p++){
 	  for(int q = 0; q < filter_size; q++){
 	    // update filter[ch][pch][p][q] here
-	    //std::cout << "computing grad : " << "ch = " << ch << " pch=" << pch << " p=" << p << " q=" << q << std::endl;
 	    int filter_idx = filter_coord(ch, pch, p, q);
 	    F grad = 0;
 	    for(int h = 0; h < unit_h; h++){
@@ -142,7 +139,6 @@ public:
 		grad += delta[ unit_coord(ch, h, w) ] * previous_layer->activated_output[ prev_coord(pch, h + p, w + q) ];
 	      }
 	    }
-	    //std::cout << "filter updating" << std::endl;
 	    // AdaGrad
 	    sum_square_grad_filter[ filter_idx ] += grad * grad;
 	    dfilter[ filter_idx ] = - learning_rate * grad / std::sqrt( std::max(sum_square_grad_filter[ filter_idx ], (F)1.0) ) + momentum * dfilter[ filter_idx ];
@@ -151,7 +147,6 @@ public:
 	}
       }
     }
-    // std::cout << layer_name + " : gradient_descent bias" << std::endl;
     // update bias
     for(int ch = 0; ch < channel; ch++){
       F grad = 0;
@@ -259,12 +254,9 @@ public:
     }
   }
   virtual void gradient_descent( F learning_rate, F momentum ){
-    // std::cout << layer_name + " : gradient_descent" << std::endl;
     vec & z = previous_layer->activated_output;
-    // std::cout << "weight" << std::endl;
     for(int i = 0; i < units; i++){
       for(int j = 0; j < inputs; j++){
-	// std::cout << "i=" << i << " j=" << j << std::endl;
 	F grad = delta[i] * z[j];
 	// AdaGrad
 	sum_square_grad[i][j] += grad * grad;
@@ -272,7 +264,6 @@ public:
 	weight[i][j] += dweight[i][j];
       }
     }
-    // std::cout << "bias" << std::endl;
     for(int i = 0; i < units; i++){
       dbias[i] = - learning_rate * delta[i] + momentum * dbias[i];
       bias[i] += dbias[i];
