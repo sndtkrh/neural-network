@@ -18,13 +18,26 @@ void load_dataset(std::string dataset_dir, std::vector<std::vector<vec> > & data
     }
   }
 }
-
+void load_dataset_max100(std::string dataset_dir, std::vector<std::vector<vec> > & dataset){
+  dataset.resize(10);
+  for(int i = 0; i < 10; i++){
+    std::vector<std::string> mnist_dataset_filenames;
+    char c = '0' + i;
+    mnist_dataset_filenames = enum_filenames( dataset_dir + "/" + c + "/");
+    int k = 0;
+    for( std::string f : mnist_dataset_filenames ){
+      dataset[i].push_back( mat_to_vec( cv::imread( f, 0 ) ) );
+      k++;
+      if( k >= 100 ) break;
+    }
+  }
+}
 void save_image( std::string filename, std::vector<F> v, int h, int w ){
   std::cout << "saving image..." << std::endl;
   cv::Mat image = cv::Mat::zeros( h, w, CV_8UC1);
   for(int i = 0; i < h; i++){
     for(int j = 0; j < w; j++){
-      image.at<uchar>(i, j) = (uchar)( std::max(v[ h * i + j ] * 255.0, 254.9) );
+      image.at<uchar>(i, j) = (uchar)( std::min(v[ h * i + j ] * 255.0, 254.9) );
     }
   }
   /*
