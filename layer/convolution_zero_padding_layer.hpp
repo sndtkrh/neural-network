@@ -1,5 +1,5 @@
-#ifndef CONVLUTIONLAYER
-#define CONVLUTIONLAYER
+#ifndef CONVLUTIONZEROPADDINGLAYER
+#define CONVLUTIONZEROPADDINGLAYER
 #include "convolution_layer.hpp"
 
 class ConvolutionZeroPaddingLayer : public ConvolutionLayer {
