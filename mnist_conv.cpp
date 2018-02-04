@@ -20,24 +20,25 @@ int main(){
   std::mt19937 mt(rnd());
 
   load_dataset(TRAINING_DATASET_DIR, mnist_dataset[0]);
-  load_dataset(TESTING_DATASET_DIR, mnist_dataset[1]);
-  std::cout << "loaded" << std::endl;
+  load_dataset_max100(TESTING_DATASET_DIR, mnist_dataset[1]);
+  std::cout << "[[[ loaded ]]]" << std::endl;
+  std::cout << std::endl;
 
   // construct neural network
   ActivationFunction rel = ReL();
   InputLayer input( IMAGE_H * IMAGE_W );
-  ConvolutionLayer conv1( 10, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "1" );
-  ConvolutionLayer conv2( 10, 3, &conv1, rel, "2" );
-  FullyConnectedLayer full1( 30, &conv2, rel, "1" );
+  ConvolutionZeroPaddingLayer conv1( 3, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "1" );
+  ConvolutionZeroPaddingLayer conv2( 5, 3, &conv1, rel, "2" );
+  FullyConnectedLayer full1( 100, &conv2, rel, "1" );
   SoftmaxLayer softmax( 10, &full1 );
 
   input.print_info();
   conv1.print_info();
-  conv2.print_info();
   full1.print_info();
   softmax.print_info();
-  std::cout << "constructed" << std::endl;
-  
+  std::cout << "[[[ constructed ]]]" << std::endl;
+  std::cout << std::endl;
+
   vec image;
   vec target(10,0);
 
@@ -50,15 +51,16 @@ int main(){
       one_step( input, softmax, image, target );
       target[j] = 0;
     }
-    if( i % 2000 == 0 ){
+    if( i % 1000 == 0 ){
       std::cout << "i=" << i << std::endl;
       test( input, softmax );
     }
   }
   std::cout << "[[[[ learned ]]]]" << std::endl;
+  std::cout << std::endl;
 
   // testing
-  test( input, softmax );
+  //test( input, softmax );
 }
 
 void one_step( InputLayer & input, Layer & output, vec data, vec target ){
