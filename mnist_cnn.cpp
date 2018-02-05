@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 #include <random>
-#include "matrix.hpp"
-#include "io.hpp"
-#include "layer/layer.hpp"
+#include "src/neuralnetwork.hpp"
 
 const std::string TRAINING_DATASET_DIR = "../MNIST_dataset/mnist_png/training";
 const std::string TESTING_DATASET_DIR = "../MNIST_dataset/mnist_png/testing";
@@ -25,13 +23,13 @@ int main(){
   std::cout << std::endl;
 
   // construct neural network
-  ActivationFunction rel = ReL();
+  ActivationFunction rel = ReLU();
   InputLayer input( IMAGE_H * IMAGE_W );
-  ConvolutionZeroPaddingLayer conv1( 10, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "conv1" );
-  MaxPoolingLayer maxpool1( 3, 1, &conv1, rel, "maxpool1" );
-  ConvolutionZeroPaddingLayer conv2( 10, 3, &maxpool1, rel, "conv2" );
-  MaxPoolingLayer maxpool2( 3, 1, &conv2, rel, "maxpool2" );
-  FullyConnectedLayer full1( 100, &maxpool2, rel, "full1" );
+  ConvolutionZeroPaddingLayer conv1( 20, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "conv1" );
+  MaxPoolingLayer maxpool1( 3, 2, &conv1, rel, "maxpool1" );
+  ConvolutionZeroPaddingLayer conv2( 20, 3, &maxpool1, rel, "conv2" );
+  MaxPoolingLayer maxpool2( 3, 2, &conv2, rel, "maxpool2" );
+  FullyConnectedLayer full1( 100, &maxpool1, rel, "full1" );
   SoftmaxLayer softmax( 10, &full1 );
 
   std::cout << "[[[ constructed ]]]" << std::endl;

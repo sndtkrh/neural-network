@@ -14,7 +14,7 @@ public:
   }
 };
 
-class ReL : public ActivationFunction {
+class ReLU : public ActivationFunction {
   // rectified linear function
 public:
   F f(F u){

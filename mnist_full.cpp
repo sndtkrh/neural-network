@@ -1,9 +1,7 @@
 #include <iostream>
 #include <string>
 #include <random>
-#include "matrix.hpp"
-#include "io.hpp"
-#include "layer/layer.hpp"
+#include "src/neuralnetwork.hpp"
 
 const std::string TRAINING_DATASET_DIR = "../MNIST_dataset/mnist_png/training";
 const std::string TESTING_DATASET_DIR = "../MNIST_dataset/mnist_png/testing";
@@ -24,7 +22,7 @@ int main(){
   std::cout << "loaded" << std::endl;
 
   // construct neural network
-  ActivationFunction rel = ReL();
+  ActivationFunction rel = ReLU();
   InputLayer input( IMAGE_H * IMAGE_W );
   FullyConnectedLayer full1( 100, &input, rel, "1" );
   FullyConnectedLayer full2( 50, &full1, rel, "2" );
