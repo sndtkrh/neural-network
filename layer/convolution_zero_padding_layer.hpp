@@ -19,7 +19,7 @@ public:
     init( channel * unit_h * unit_w, prev, af, "convolution zero padding: " + ln );
     init_conv();
   }
-  ConvolutionZeroPaddingLayer(int ch, int fs, ConvolutionLayer * prev, ActivationFunction af, std::string ln) {
+  ConvolutionZeroPaddingLayer(int ch, int fs, Layer2D * prev, ActivationFunction af, std::string ln) {
     channel = ch;
     filter_size = fs;
     prev_channel = prev->channel;
@@ -88,16 +88,16 @@ public:
       for(int pch = 0; pch < prev_channel; pch++){
         for(int s = 0; s < filter_size; s++){
           for(int t = 0; t < filter_size; t++){
-	    int p = s - filter_size / 2;
-	    int q = t - filter_size / 2;
+            int p = s - filter_size / 2;
+            int q = t - filter_size / 2;
             // update filter[ch][pch][s][t]
             int filter_idx = filter_coord(ch, pch, s, t);
             F grad = 0;
             for(int h = 0; h < unit_h; h++){
               for(int w = 0; w < unit_w; w++){
-		if( is_in_prev( pch, h + p, w + q ) ){
-		  grad += delta[ unit_coord(ch, h, w) ] * previous_layer->activated_output[ prev_coord(pch, h + p, w + q) ];
-		}
+                if( is_in_prev( pch, h + p, w + q ) ){
+                  grad += delta[ unit_coord(ch, h, w) ] * previous_layer->activated_output[ prev_coord(pch, h + p, w + q) ];
+                }
               }
             }
             // AdaGrad

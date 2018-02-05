@@ -1,13 +1,17 @@
 #ifndef CONVLUTIONLAYER
 #define CONVLUTIONLAYER
 #include "layer_base.hpp"
+#include "layer_2d.hpp"
 
-class ConvolutionLayer : public Layer {
+class ConvolutionLayer : public Layer2D {
   // stride = 1
 public:
   ConvolutionLayer(){ }
-  ConvolutionLayer(int channel, int filter_size, Layer * prev, int prev_channel, int prev_h, int prev_w, ActivationFunction af, std::string ln)
-  : channel(channel), filter_size(filter_size), prev_channel(prev_channel), prev_h(prev_h), prev_w(prev_w) {
+  ConvolutionLayer(int ch, int fs, Layer * prev, int pch, int ph, int pw, ActivationFunction af, std::string ln) {
+    filter_size = fs;
+    prev_channel = pch;
+    prev_h = ph;
+    prev_w = pw;
     if( prev->units != prev_channel * prev_h * prev_w ){
       throw "not compatible layer size";
     }
@@ -16,8 +20,9 @@ public:
     init( channel * unit_h * unit_w, prev, af, "convolution : " + ln );
     init_conv();
   }
-  ConvolutionLayer(int channel, int filter_size, ConvolutionLayer * prev, ActivationFunction af, std::string ln)
-  : channel(channel), filter_size(filter_size) {
+  ConvolutionLayer(int ch, int fs, Layer2D * prev, ActivationFunction af, std::string ln) {
+    channel = ch;
+    filter_size = fs;
     unit_h = prev->unit_h - 2 * ( filter_size / 2 );
     unit_w = prev->unit_h - 2 * ( filter_size / 2 );
     prev_channel = prev->channel;
@@ -50,7 +55,7 @@ public:
   virtual void back_propagate(){
     // compute previous layer's delta
     vec & prev_delta = previous_layer->delta;
-    fill( prev_delta.begin(), prev_delta.end(), 0 );
+    std::fill( prev_delta.begin(), prev_delta.end(), 0 );
     for(int ch = 0; ch < channel; ch++){
       for(int pch = 0; pch < prev_channel; pch++){
         for(int h = 0; h < unit_h; h++){
@@ -99,8 +104,6 @@ public:
   }
   
   int filter_size;
-  int channel, unit_h, unit_w;
-  int prev_channel, prev_h, prev_w;
 
 protected:
   vec bias;
@@ -109,7 +112,6 @@ protected:
   vec filter;
   vec dfilter;
   vec sum_square_grad_filter;
-  vec delta;
 
   void update_bias(F learning_rate, F momentum){
     for(int ch = 0; ch < channel; ch++){
@@ -125,24 +127,8 @@ protected:
       bias[ ch ] += dbias[ ch ];
     }
   }
-  int unit_coord( int c, int h, int w ){
-    return c * unit_h * unit_w + h * unit_w + w;
-  }
-  int prev_coord( int c, int h, int w ){
-    return c * prev_h * prev_w + h * prev_w + w;
-  }
   int filter_coord( int tc, int pc, int s, int t ){
     return tc * prev_channel * filter_size * filter_size + pc * filter_size * filter_size + s * filter_size + t;
-  }
-  bool is_in_prev(int c, int h, int w){
-    return (0 <= c && c < prev_channel
-	    && 0 <= h && h < prev_h
-	    && 0 <= w && w < prev_w );
-  }
-  bool is_in_unit(int c, int h, int w){
-    return (0 <= c && c < channel
-	    && 0 <= h && h < unit_h
-	    && 0 <= w && w < unit_w );
   }
   bool is_in_filter(int tc, int pc, int s, int t ){
     return (0 <= tc && tc < channel
@@ -155,13 +141,11 @@ protected:
     filter.resize( filter_total );
     dfilter.resize( filter_total, 0 );
     sum_square_grad_filter.resize( filter_total, 0 );
-    
+
     bias.resize(channel, 0);
     dbias.resize(channel, 0);
-    sum_square_grad_bias.resize(channel, 0);
-    
-    delta.resize( channel * unit_h * unit_w );
-    
+    sum_square_grad_bias.resize(channel, 0 );
+
     // random initialization
     std::random_device seed_gen;
     std::default_random_engine engine(seed_gen());

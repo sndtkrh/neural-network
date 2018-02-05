@@ -20,22 +20,20 @@ int main(){
   std::mt19937 mt(rnd());
 
   load_dataset(TRAINING_DATASET_DIR, mnist_dataset[0]);
-  load_dataset_max100(TESTING_DATASET_DIR, mnist_dataset[1]);
+  load_dataset(TESTING_DATASET_DIR, mnist_dataset[1]);
   std::cout << "[[[ loaded ]]]" << std::endl;
   std::cout << std::endl;
 
   // construct neural network
   ActivationFunction rel = ReL();
   InputLayer input( IMAGE_H * IMAGE_W );
-  ConvolutionZeroPaddingLayer conv1( 3, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "1" );
-  ConvolutionZeroPaddingLayer conv2( 5, 3, &conv1, rel, "2" );
-  FullyConnectedLayer full1( 100, &conv2, rel, "1" );
+  ConvolutionZeroPaddingLayer conv1( 10, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "conv1" );
+  MaxPoolingLayer maxpool1( 3, 1, &conv1, rel, "maxpool1" );
+  ConvolutionZeroPaddingLayer conv2( 10, 3, &maxpool1, rel, "conv2" );
+  MaxPoolingLayer maxpool2( 3, 1, &conv2, rel, "maxpool2" );
+  FullyConnectedLayer full1( 100, &maxpool2, rel, "full1" );
   SoftmaxLayer softmax( 10, &full1 );
 
-  input.print_info();
-  conv1.print_info();
-  full1.print_info();
-  softmax.print_info();
   std::cout << "[[[ constructed ]]]" << std::endl;
   std::cout << std::endl;
 
@@ -43,7 +41,7 @@ int main(){
   vec target(10,0);
 
   // learning
-  for(int i = 0; i < 100000; i++){
+  for(int i = 0; i < 50000; i++){
     for(int j = 0; j < 10; j++){
       std::uniform_int_distribution<> rand(0, mnist_dataset[0][j].size()-1 );
       image = mnist_dataset[0][j][ rand(mt) ];
@@ -60,7 +58,7 @@ int main(){
   std::cout << std::endl;
 
   // testing
-  //test( input, softmax );
+  test( input, softmax );
 }
 
 void one_step( InputLayer & input, Layer & output, vec data, vec target ){
