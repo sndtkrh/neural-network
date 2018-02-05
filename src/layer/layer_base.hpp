@@ -31,14 +31,11 @@ public:
     target = t;
   }
 
-  void print_info( ){
-    std::cout << "layer name = " << layer_name << std::endl;
-    std::cout << "inputs=" << inputs << std::endl;
-    std::cout << "units=" << units << std::endl;
-    if( previous_layer != nullptr )
-      std::cout << "previous_layer=" << previous_layer->layer_name << std::endl;
-    if( next_layer != nullptr )
-      std::cout << "next_layer=" << next_layer->layer_name << std::endl;
+  virtual void print_info( ){
+    std::cout << layer_name << std::endl;
+    std::cout << "  inputs = " << inputs << std::endl;
+    std::cout << "  units = " << units << std::endl;
+    std::cout << "  activation function = " << activation_func.func_name << std::endl;
     std::cout << std::endl;
   }
 protected:

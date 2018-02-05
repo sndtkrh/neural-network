@@ -10,7 +10,14 @@ public:
   
   int channel, unit_h, unit_w;
   int prev_channel, prev_h, prev_w;
-  
+
+  virtual void print_info( ){
+    std::cout << layer_name << std::endl;
+    std::cout << "  units = [ channel=" << channel << ", h=" << unit_h << ", w=" << unit_w << "]" << std::endl;
+    std::cout << "  inputs = [ channel=" << prev_channel << ", h=" << prev_h << ", w=" << prev_w << "]" << std::endl;
+    std::cout << "  activation function = " << activation_func.func_name << std::endl;
+    std::cout << std::endl;
+  }  
 protected:
   int unit_coord( int c, int h, int w ){
     return c * unit_h * unit_w + h * unit_w + w;

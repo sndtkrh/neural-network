@@ -29,8 +29,10 @@ int main(){
   MaxPoolingLayer maxpool1( 3, 2, &conv1, rel, "maxpool1" );
   ConvolutionZeroPaddingLayer conv2( 20, 3, &maxpool1, rel, "conv2" );
   MaxPoolingLayer maxpool2( 3, 2, &conv2, rel, "maxpool2" );
-  FullyConnectedLayer full1( 100, &maxpool1, rel, "full1" );
+  FullyConnectedLayer full1( 500, &maxpool2, rel, "full1" );
   SoftmaxLayer softmax( 10, &full1 );
+
+  input.print_network_info();
 
   std::cout << "[[[ constructed ]]]" << std::endl;
   std::cout << std::endl;

@@ -5,7 +5,7 @@
 class FullyConnectedLayer : public Layer {
 public:
   FullyConnectedLayer(int u, Layer * prev, ActivationFunction af, std::string ln){
-    init( u, prev, af, "fully connected : " + ln );
+    init( u, prev, af, "[fully connected]" + ln );
     weight.resize( units );
     dweight.resize( units );
     sum_square_grad_weight.resize( units );

@@ -28,7 +28,7 @@ public:
     prev_channel = prev->channel;
     prev_h = prev->unit_h;
     prev_w = prev->unit_w;
-    init( channel * unit_h * unit_w, prev, af, "convolution : " + ln );
+    init( channel * unit_h * unit_w, prev, af, "[convolution]" + ln );
     init_conv();
   }
   virtual void propagate(){

@@ -14,7 +14,7 @@ public:
     prev_w = prev->unit_w;
     unit_h = prev_h / stride;
     unit_w = prev_w / stride;
-    init( channel * unit_h * unit_w, prev, af, "pooling : " + ln );
+    init( channel * unit_h * unit_w, prev, af, "[max pooling]" + ln );
     unit_max_coord.resize( units );
   }
 

@@ -9,7 +9,7 @@ public:
     unit_output.resize( units );
     delta.resize( units );
     activated_output.resize( units );
-    layer_name = "input";
+    layer_name = "[input]";
   }
   void propagate( vec & in ) {
     input_vec = in;
@@ -27,7 +27,13 @@ public:
     if( next_layer != nullptr )
       next_layer->gradient_descent( learning_rate, momentum );
   }
-  
+  void print_network_info( ){
+    Layer * l = this;
+    while( l != nullptr ){
+      l->print_info();
+      l = l->next_layer;
+    }
+  }
 private:
   vec input_vec;
 };

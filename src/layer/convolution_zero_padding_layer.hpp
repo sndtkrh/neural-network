@@ -16,7 +16,7 @@ public:
     }
     unit_h = prev_h;
     unit_w = prev_w;
-    init( channel * unit_h * unit_w, prev, af, "convolution zero padding: " + ln );
+    init( channel * unit_h * unit_w, prev, af, "[convolution zero padding]" + ln );
     init_conv();
   }
   ConvolutionZeroPaddingLayer(int ch, int fs, Layer2D * prev, ActivationFunction af, std::string ln) {
@@ -27,7 +27,7 @@ public:
     prev_w = prev->unit_w;
     unit_h = prev_h;
     unit_w = prev_w;
-    init( channel * unit_h * unit_w, prev, af, "convolution zero padding: " + ln );
+    init( channel * unit_h * unit_w, prev, af, "[convolution zero padding]" + ln );
     init_conv();
   }
   void propagate(){

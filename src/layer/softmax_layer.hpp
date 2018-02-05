@@ -2,9 +2,17 @@
 #define SOFTMAXLAYER
 #include "fully_connected_layer.hpp"
 
+class Softmax : public ActivationFunction {
+  // this is a damy class
+public:
+  Softmax(){
+    func_name = "softmax";
+  }
+};
+
 class SoftmaxLayer : public FullyConnectedLayer {
 public:
-  SoftmaxLayer(int u, Layer * prev ) : FullyConnectedLayer( u, prev, ActivationFunction(), "softmax" ){}
+  SoftmaxLayer(int u, Layer * prev ) : FullyConnectedLayer( u, prev, Softmax(), "[softmax]" ){}
   
   void propagate(){
     vec & z = previous_layer->activated_output;
