@@ -10,8 +10,8 @@ const int IMAGE_H = 28;
 const int IMAGE_W = 28;
 std::vector<std::vector<vec> > mnist_dataset[2]; // 0:training, 1:testing
 
-void one_step( InputLayer & input, Layer & output, vec data, vec target );
-void test( InputLayer & input, SoftmaxLayer & output );
+void one_step( InputLayer2D & input, Layer & output, vec data, vec target );
+void test( InputLayer2D & input, SoftmaxLayer & output );
 
 int main(){
   std::random_device rnd;
@@ -24,8 +24,8 @@ int main(){
 
   // construct neural network
   ActivationFunction rel = ReLU();
-  InputLayer input( IMAGE_H * IMAGE_W );
-  ConvolutionZeroPaddingLayer conv1( 20, 5, &input, 1, IMAGE_H, IMAGE_W, rel, "conv1" );
+  InputLayer2D input( 1, IMAGE_H, IMAGE_W );
+  ConvolutionZeroPaddingLayer conv1( 20, 5, &input, rel, "conv1" );
   MaxPoolingLayer maxpool1( 3, 2, &conv1, rel, "maxpool1" );
   ConvolutionZeroPaddingLayer conv2( 20, 3, &maxpool1, rel, "conv2" );
   MaxPoolingLayer maxpool2( 3, 2, &conv2, rel, "maxpool2" );
@@ -61,7 +61,7 @@ int main(){
   test( input, softmax );
 }
 
-void one_step( InputLayer & input, Layer & output, vec data, vec target ){
+void one_step( InputLayer2D & input, Layer & output, vec data, vec target ){
   input.propagate( data );
 
   output.set_target( target );
@@ -70,7 +70,7 @@ void one_step( InputLayer & input, Layer & output, vec data, vec target ){
   input.gradient_descent( 0.01, 0.5 );
 }
 
-void test( InputLayer & input, SoftmaxLayer & output ){
+void test( InputLayer2D & input, SoftmaxLayer & output ){
   int n = 0;
   int correct = 0;
   vec image;

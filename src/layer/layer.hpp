@@ -2,6 +2,7 @@
 #define LAYER
 
 #include "input_layer.hpp"
+#include "input_layer_2d.hpp"
 #include "fully_connected_layer.hpp"
 #include "softmax_layer.hpp"
 #include "convolution_layer.hpp"
