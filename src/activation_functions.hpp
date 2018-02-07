@@ -49,4 +49,18 @@ public:
     return f(u) * (1 - f(u));
   }
 } sigmoid;
+
+class Softmax : public ActivationFunction {
+  // this is a damy class
+public:
+  Softmax(){
+    func_name = "softmax";
+  }
+  F f(F u){
+    return 0;
+  }
+  F df(F u){
+    return 0;
+  }
+} softmax;
 #endif

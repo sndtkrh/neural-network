@@ -2,20 +2,6 @@
 #define SOFTMAXLAYER
 #include "fully_connected_layer.hpp"
 
-class Softmax : public ActivationFunction {
-  // this is a damy class
-public:
-  Softmax(){
-    func_name = "softmax";
-  }
-  F f(F u){
-    return 0;
-  }
-  F df(F u){
-    return 0;
-  }
-} softmax;
-
 class SoftmaxLayer : public FullyConnectedLayer {
 public:
   SoftmaxLayer(int u, Layer * prev ) : FullyConnectedLayer( u, prev, &softmax, "[softmax]" ){}
