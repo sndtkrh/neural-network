@@ -4,7 +4,7 @@
 
 class FullyConnectedLayer : public Layer {
 public:
-  FullyConnectedLayer(int u, Layer * prev, ActivationFunction af, std::string ln){
+  FullyConnectedLayer(int u, Layer * prev, ActivationFunction * af, std::string ln){
     init( u, prev, af, "[fully connected]" + ln );
     weight.resize( units );
     dweight.resize( units );
@@ -35,6 +35,9 @@ public:
       next_layer->propagate();
   }
   virtual void back_propagate() {
+    if( next_layer == nullptr ){
+      compute_this_layer_delta();
+    }
     compute_previous_layer_delta();
     if( previous_layer != nullptr )
       previous_layer->back_propagate();
@@ -44,8 +47,14 @@ public:
     std::fill( prev_delta.begin(), prev_delta.end(), 0 );
     for(int pu = 0; pu < inputs; pu++){
       for(int u = 0; u < units; u++){
-        prev_delta[pu] += delta[u] * weight[u][pu] * previous_layer->activation_func.df( previous_layer->unit_output[pu] );
+        prev_delta[pu] += delta[u] * weight[u][pu] * previous_layer->activation_func->df( previous_layer->unit_output[pu] );
       }
+    }
+  }
+  void compute_this_layer_delta(){
+    std::fill( delta.begin(), delta.end(), 0 );
+    for(int u = 0; u < units; u++){
+      delta[u] = activated_output[u] - target[u];
     }
   }
   virtual void gradient_descent( F learning_rate, F momentum ){
@@ -70,7 +79,9 @@ public:
       next_layer->gradient_descent( learning_rate, momentum );
     }
   }
-  
+  void print_weight(){
+    print_mat( weight );
+  }
 protected:
   mat weight;
   mat dweight;

@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <cmath>
 
 typedef float F;
 typedef std::vector<F> vec;

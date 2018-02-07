@@ -6,16 +6,22 @@
 class ActivationFunction{
 public:
   std::string func_name;
-  ActivationFunction(){
-    func_name = "id";
+  virtual F f(F u) = 0;
+  virtual F df(F u) = 0;
+};
+
+class Id : public ActivationFunction {
+public:
+  Id(){
+    func_name = "Id";
   }
-  virtual F f(F u){
+  F f(F u){
     return u;
   }
-  virtual F df(F u){
-    return 1;
+  F df(F u){
+    return 1.0;
   }
-};
+} id;
 
 class ReLU : public ActivationFunction {
   // rectified linear function
@@ -24,11 +30,23 @@ public:
     func_name = "ReLU";
   }
   F f(F u){
-    return std::max(F(0.0), u);
+    return std::max(F(0), u);
   }
   F df(F u){
-    return (u < 0) ? 0 : 1;
+    return (u < 0) ? 0 : 1.0;
   }
-};
+} relu;
 
+class Sigmoid : public ActivationFunction {
+public:
+  Sigmoid(){
+    func_name = "sigmoid";
+  }
+  F f(F u){
+    return 1.0 / (1.0 + std::exp(-u));
+  }
+  F df(F u){
+    return f(u) * (1 - f(u));
+  }
+} sigmoid;
 #endif

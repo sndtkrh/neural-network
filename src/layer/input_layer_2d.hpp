@@ -12,6 +12,7 @@ public:
     unit_output.resize( units, 0 );
     activated_output.resize( units, 0 );
     delta.resize( units, 0 );
+    activation_func = &id;
     layer_name = "[input 2D]";
   }
   void propagate( vec & in ) {

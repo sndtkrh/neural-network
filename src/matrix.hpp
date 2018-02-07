@@ -26,18 +26,20 @@ vec vec_plus_vec(const vec & v, const vec & u){
   return r;
 }
 
-vec function_apply_to_vec(ActivationFunction & af, const vec & v){
+vec function_apply_to_vec(ActivationFunction * af, const vec & v){
   vec r(v.size());
   for(int i = 0; i < v.size(); i++){
-    r[i] = af.f(v[i]);
+    r[i] = af->f(v[i]);
   }
   return r;
 }
 
 void print_mat(const mat & M){
+  std::cout << std::fixed;
+  std::cout << std::setprecision(2);
   for(int i = 0; i < M.size(); i++){
     for(int j = 0; j < M[i].size(); j++){
-      std::cout << ((M[i][j] != 0) ? 1 : 0 ) << " ";
+      std::cout << M[i][j] << " ";
     }
     std::cout << std::endl;
   }

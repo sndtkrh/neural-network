@@ -12,7 +12,7 @@ public:
   Layer * next_layer;
   int units;
   int inputs;
-  ActivationFunction activation_func;
+  ActivationFunction * activation_func;
   vec unit_output, activated_output;
   vec delta;
   std::string layer_name;
@@ -20,12 +20,6 @@ public:
   virtual void propagate() = 0;
   virtual void back_propagate() = 0;
   virtual void gradient_descent(F learning_rate, F momentum) = 0;
-  ActivationFunction func(){
-    return activation_func;
-  }
-  std::string name(){
-    return layer_name;
-  }
 
   void set_target( vec & t ){
     target = t;
@@ -35,12 +29,12 @@ public:
     std::cout << layer_name << std::endl;
     std::cout << "  inputs = " << inputs << std::endl;
     std::cout << "  units = " << units << std::endl;
-    std::cout << "  activation function = " << activation_func.func_name << std::endl;
+    std::cout << "  activation function = " << activation_func->func_name << std::endl;
     std::cout << std::endl;
   }
 protected:
   vec target;
-  void init( int u, Layer * prev, ActivationFunction af, std::string ln) {
+  void init( int u, Layer * prev, ActivationFunction * af, std::string ln) {
     next_layer = nullptr;
     previous_layer = prev;
     previous_layer->next_layer = this;

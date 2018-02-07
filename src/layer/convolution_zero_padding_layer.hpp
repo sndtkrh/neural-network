@@ -5,7 +5,7 @@
 class ConvolutionZeroPaddingLayer : public ConvolutionLayer {
   // stride = 1
 public:
-  ConvolutionZeroPaddingLayer(int ch, int fs, Layer * prev, int pch, int ph, int pw, ActivationFunction af, std::string ln) {
+  ConvolutionZeroPaddingLayer(int ch, int fs, Layer * prev, int pch, int ph, int pw, ActivationFunction * af, std::string ln) {
     channel = ch;
     filter_size = fs;
     prev_channel = pch;
@@ -19,7 +19,7 @@ public:
     init( channel * unit_h * unit_w, prev, af, "[convolution zero padding]" + ln );
     init_conv();
   }
-  ConvolutionZeroPaddingLayer(int ch, int fs, Layer2D * prev, ActivationFunction af, std::string ln) {
+  ConvolutionZeroPaddingLayer(int ch, int fs, Layer2D * prev, ActivationFunction * af, std::string ln) {
     channel = ch;
     filter_size = fs;
     prev_channel = prev->channel;
@@ -48,7 +48,7 @@ public:
               }
             }
           }
-          activated_output[ idx ] = activation_func.f( unit_output[ idx ] );
+          activated_output[ idx ] = activation_func->f( unit_output[ idx ] );
         }
       }
     }
@@ -71,7 +71,7 @@ public:
 		  prev_delta[ prev_coord(pch, h + p, w + q) ]
 		    += delta[ unit_coord(ch, h, w) ]
 		    * filter[ filter_coord(ch, pch, s, t) ]
-		    * previous_layer->activation_func.df( previous_layer->unit_output[ prev_coord(pch, h + p, w + q) ] );
+		    * previous_layer->activation_func->df( previous_layer->unit_output[ prev_coord(pch, h + p, w + q) ] );
 		}
               }
             }

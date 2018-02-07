@@ -7,7 +7,7 @@ class ConvolutionLayer : public Layer2D {
   // stride = 1
 public:
   ConvolutionLayer(){ }
-  ConvolutionLayer(int ch, int fs, Layer * prev, int pch, int ph, int pw, ActivationFunction af, std::string ln) {
+  ConvolutionLayer(int ch, int fs, Layer * prev, int pch, int ph, int pw, ActivationFunction * af, std::string ln) {
     filter_size = fs;
     prev_channel = pch;
     prev_h = ph;
@@ -20,7 +20,7 @@ public:
     init( channel * unit_h * unit_w, prev, af, "convolution : " + ln );
     init_conv();
   }
-  ConvolutionLayer(int ch, int fs, Layer2D * prev, ActivationFunction af, std::string ln) {
+  ConvolutionLayer(int ch, int fs, Layer2D * prev, ActivationFunction * af, std::string ln) {
     channel = ch;
     filter_size = fs;
     unit_h = prev->unit_h - 2 * ( filter_size / 2 );
@@ -45,7 +45,7 @@ public:
               }
             }
           }
-          activated_output[ idx ] = activation_func.f( unit_output[ idx ] );
+          activated_output[ idx ] = activation_func->f( unit_output[ idx ] );
         }
       }
     }
@@ -65,7 +65,7 @@ public:
                 prev_delta[ prev_coord(pch, h + p, w + q) ]
                 += delta[ unit_coord(ch, h, w) ]
                 * filter[ filter_coord(ch, pch, p, q) ]
-                * previous_layer->activation_func.df( previous_layer->unit_output[ prev_coord(pch, h + p, w + q) ] );
+                * previous_layer->activation_func->df( previous_layer->unit_output[ prev_coord(pch, h + p, w + q) ] );
               }
             }
           }

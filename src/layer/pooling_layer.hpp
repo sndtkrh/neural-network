@@ -6,7 +6,7 @@
 class MaxPoolingLayer : public Layer2D {
 public:
   MaxPoolingLayer(){}
-  MaxPoolingLayer(int ps, int st, Layer2D * prev, ActivationFunction af, std::string ln){
+  MaxPoolingLayer(int ps, int st, Layer2D * prev, ActivationFunction * af, std::string ln){
     pooling_size = ps;
     stride = st;
     channel = prev_channel = prev->channel;
@@ -38,7 +38,7 @@ public:
 	  int unit_idx = unit_coord(c, h, w);
 	  unit_max_coord[ unit_idx ] = std::make_pair(mph, mpw);
 	  unit_output[ unit_idx ] = mv;
-	  activated_output[ unit_idx ] = activation_func.f( mv );
+	  activated_output[ unit_idx ] = activation_func->f( mv );
 	}
       }
     }
@@ -55,7 +55,7 @@ public:
 	  int ph = unit_max_coord[ unit_coord(c, h, w) ].first;
 	  int pw = unit_max_coord[ unit_coord(c, h, w) ].second;
 	  prev_delta[ prev_coord(c, ph, pw) ]
-	    += delta[ unit_coord(c, h, w) ] * previous_layer->activation_func.df( previous_layer->unit_output[ prev_coord(c, ph, pw) ] );
+	    += delta[ unit_coord(c, h, w) ] * previous_layer->activation_func->df( previous_layer->unit_output[ prev_coord(c, ph, pw) ] );
 	}
       }
     }

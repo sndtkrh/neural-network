@@ -7,31 +7,24 @@
 std::vector<std::string> enum_filenames(const std::string path);
 vec mat_to_vec( cv::Mat m );
 
+void load_dataset(std::string dataset_dir, std::vector<std::vector<vec> > & dataset, int size){
+  dataset.resize(10);
+  for(int i = 0; i < 10; i++){
+    std::vector<std::string> mnist_dataset_filenames;
+    mnist_dataset_filenames = enum_filenames( dataset_dir + "/" + std::to_string(i) + "/");
+    for( std::string f : mnist_dataset_filenames ){
+      if( size != -1 && dataset[i].size() >= size ){
+	break;
+      }
+      dataset[i].push_back( mat_to_vec( cv::imread( f, 0 ) ) );
+    }
+  }
+}
+
 void load_dataset(std::string dataset_dir, std::vector<std::vector<vec> > & dataset){
-  dataset.resize(10);
-  for(int i = 0; i < 10; i++){
-    std::vector<std::string> mnist_dataset_filenames;
-    char c = '0' + i;
-    mnist_dataset_filenames = enum_filenames( dataset_dir + "/" + c + "/");
-    for( std::string f : mnist_dataset_filenames ){
-      dataset[i].push_back( mat_to_vec( cv::imread( f, 0 ) ) );
-    }
-  }
+  load_dataset(dataset_dir, dataset, -1);
 }
-void load_dataset_max100(std::string dataset_dir, std::vector<std::vector<vec> > & dataset){
-  dataset.resize(10);
-  for(int i = 0; i < 10; i++){
-    std::vector<std::string> mnist_dataset_filenames;
-    char c = '0' + i;
-    mnist_dataset_filenames = enum_filenames( dataset_dir + "/" + c + "/");
-    int k = 0;
-    for( std::string f : mnist_dataset_filenames ){
-      dataset[i].push_back( mat_to_vec( cv::imread( f, 0 ) ) );
-      k++;
-      if( k >= 100 ) break;
-    }
-  }
-}
+
 void save_image( std::string filename, std::vector<F> v, int h, int w ){
   std::cout << "saving image..." << std::endl;
   cv::Mat image = cv::Mat::zeros( h, w, CV_8UC1);
@@ -40,11 +33,6 @@ void save_image( std::string filename, std::vector<F> v, int h, int w ){
       image.at<uchar>(i, j) = (uchar)( std::min(v[ h * i + j ] * 255.0, 254.9) );
     }
   }
-  /*
-  cv::namedWindow("image", cv::WINDOW_AUTOSIZE);
-  cv::imshow("image", image);
-  cv::waitKey(3000);
-  */
   cv::imwrite(filename, image);
 }
 

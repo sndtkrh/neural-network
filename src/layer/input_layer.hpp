@@ -9,6 +9,7 @@ public:
     unit_output.resize( units );
     delta.resize( units );
     activated_output.resize( units );
+    activation_func = &id;
     layer_name = "[input]";
   }
   void propagate( vec & in ) {
