@@ -13,8 +13,8 @@ public:
 
   virtual void print_info( ){
     std::cout << layer_name << std::endl;
-    std::cout << "  units = [ channel=" << channel << ", h=" << unit_h << ", w=" << unit_w << "]" << std::endl;
     std::cout << "  inputs = [ channel=" << prev_channel << ", h=" << prev_h << ", w=" << prev_w << "]" << std::endl;
+    std::cout << "  units = [ channel=" << channel << ", h=" << unit_h << ", w=" << unit_w << "]" << std::endl;
     std::cout << "  activation function = " << activation_func->func_name << std::endl;
     std::cout << std::endl;
   }  

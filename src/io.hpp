@@ -30,7 +30,7 @@ void save_image( std::string filename, std::vector<F> v, int h, int w ){
   cv::Mat image = cv::Mat::zeros( h, w, CV_8UC1);
   for(int i = 0; i < h; i++){
     for(int j = 0; j < w; j++){
-      image.at<uchar>(i, j) = (uchar)( std::min(v[ h * i + j ] * 255.0, 254.9) );
+      image.at<uchar>(i, j) = (uchar)( std::min(v[ i * w + j ] * 255.0, 254.9) );
     }
   }
   cv::imwrite(filename, image);
