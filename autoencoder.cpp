@@ -28,8 +28,6 @@ int main(){
   save_image( "output/target.png", v, IMAGE_H, 10 * IMAGE_W );
 
   // construct autoencoder
-  std::cout << relu.f( -1.0 ) << std::endl;
-
   InputLayer2D input( 1, IMAGE_H, IMAGE_W );
   FullyConnectedLayer med( 50, &input, &relu, "med" );
   FullyConnectedLayer output( IMAGE_H * IMAGE_W, &med, &sigmoid, "output" );

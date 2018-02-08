@@ -20,7 +20,6 @@ void load_dataset(std::string dataset_dir, std::vector<std::vector<vec> > & data
     }
   }
 }
-
 void load_dataset(std::string dataset_dir, std::vector<std::vector<vec> > & dataset){
   load_dataset(dataset_dir, dataset, -1);
 }
@@ -38,9 +37,10 @@ void save_image( std::string filename, std::vector<F> v, int h, int w ){
 
 vec mat_to_vec( cv::Mat m ){
   vec v( m.rows * m.cols, 0 );
-  for(int i = 0; i < m.rows; i++){
-    for(int j = 0; j < m.cols; j++){
-      v[ i * m.rows + j ] = (F)m.at<uchar>( i, j ) / 255.0;
+  std::cout << "mat_to_vec " << m.rows << "x" << m.cols << std::endl;
+  for(int i = 0; i < m.cols; i++){
+    for(int j = 0; j < m.rows; j++){
+      v[ i * m.cols + j ] = (F)m.at<uchar>( i, j ) / 255.0;
     }
   }
   return v;
