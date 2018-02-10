@@ -38,8 +38,8 @@ public:
       l = l->next_layer;
     }
   }
-private:
   vec input_vec;
+private:
 };
 
 #endif
